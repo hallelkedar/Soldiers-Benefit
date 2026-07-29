@@ -8,12 +8,12 @@ export default {
         const result = await collection.insertOne(data)
         return result.insertedId.toString()
     },
-    find: (id) => {
-        const benefit = await collection.findOne({id: id})
+    find: (filter) => {
+        const benefit = await collection.findOne(filter)
         return benefit || null
     },
-    update: (id, data) => {
-        const result = await collection.updateOne({id: id}, data)
+    updateHistory: (soldierId, data) => {
+        const result = await collection.updateOne({soldierId}, {$push: {history: data}})
         return result.modifiedCount > 0
 
     }
