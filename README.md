@@ -33,7 +33,7 @@ There are 3 types of intities:
 for that intity I choosed noSQL - mongoDB, because we can't know the exactly schema that will be in every benefit, we using array inside the document, and we don't need any connection between collections
 
 - Budget allocation, Spend transation - 
-Now we have stable and constent schema, we need connection between tables, so we'll choose postgreSQl with supabase
+Now we have stable and constent schema, we need connection between tables, so we'll choose postgreSQL with supabase
 
 
 
