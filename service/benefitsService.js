@@ -1,48 +1,20 @@
 import benefitsRepo from "../repository/benefitsRepo.js";
 import { errorThrowing } from "../utils/utils.js";
+import { benefitValidation } from "../utils/validation.js";
 
 export default function createBenefitService(repo) {
   return {
-    createBenefit: async (data) => {
-      const {
-        soldierId,
-        unit,
-        benefitType,
-        details,
-        decisionReason,
-        budgetApproved,
-        startDate,
-      } = data;
+    createBenefit: async (soldierId, data) => {
+      const { unit, benefitType, details, decisionReason, budgetApproved } =
+        data;
       if (await repo.find({ soldierId })) {
         errorThrowing("Soldier is already exists.", 409);
       }
-
-      if (benefitType === "giftCard") {
-        const { cardProvide, monthlyValue, validMerchants } = details;
-        if (!cardProvide || !monthlyValue || !validMerchants) {
-          errorThrowing(
-            "cardProvide, monthlyValue and validMerchants are requierd fields.",
-            400,
-          );
-        }
-        if (isNaN(Number(monthlyValue))) {
-          errorThrowing("monthlyValue has to be a number", 400);
-        }
-        if (typeof validMerchants !== "object") {
-          errorThrowing("validMerchants has to be array", 400);
-        }
-      } else if (benefitType === "diningHall") {
-        const { baseId, kosherLevel, mealTimes } = details;
-        if (!baseId || !kosherLevel || !mealTimes) {
-          errorThrowing(
-            "baseId, kosherLevel and mealTimes are requierd fields.",
-            400,
-          );
-        }
-        if (typeof mealTimess !== "object") {
-          errorThrowing("mealTimes has to be array", 400);
-        }
+      let startDate = null;
+      if (data.startDate) {
+        startDate = new Date(data.startDate).toDateString();
       }
+      benefitValidation(benefitType, details, decisionReason, budgetApproved);
 
       const newId = await repo.create({
         soldierId,
@@ -72,14 +44,49 @@ export default function createBenefitService(repo) {
       return benefit;
     },
     addBenefit: async (soldierId, data) => {
-      const {
-        benefitType,
-        details,
-        decisionReason,
-        budgetApproved,
-        decisionDate,
-      } = data;
-      
+      const benefit = await repo.find(soldierId);
+      if (!benefit) {
+        errorThrowing(
+          `Walfare record for soldierId (${soldierId}) not found`,
+          404,
+        );
+        const {
+          benefitType,
+          details,
+          decisionReason,
+          budgetApproved,
+          decisionDate,
+        } = data;
+        
+        let startDate = null;
+        if (data.startDate) {
+          startDate = new Date(data.startDate).toDateString();
+        }
+
+        benefitValidation(benefitType, details, decisionReason, budgetApproved);
+        if (decisionDate.getDate() === 1) {
+          // && TODO if number of the day that pass from jan 1 that year (including it) is a prime number)
+          return {
+            reverted: true,
+            reason: "Minister of finance is a bit despondent",
+          };
+        }
+
+        benefit.benefitType = benefitType;
+        benefit.currentBenefitType = new Date().toDateString();
+        benefit.budgetApproved = budgetApproved;
+        benefit.history[benefit.history.length - 1].endDate =
+          new Date().toDateString();
+        benefit.details.push({
+          startDate: decisionDate || new Date().toTimeString(),
+          endDate: null,
+          decisionReason,
+          budgetApproved,
+          benefitType,
+          details,
+        });
+        await repo.update(soldierId, benefit);
+      }
     },
   };
 }
