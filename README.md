@@ -14,11 +14,11 @@
 ```
 METHOD | URL | EXPECTED STATUS CODE | DONE
 -------------------
-POST | /soldiers/:soldierId/benefits | 201 / 409 | V
+POST | /soldiers/:soldierId/benefits | 201 / 409 / 400 | V
 GET | /soldiers/:soldierId/benefits | 200 / 404 | V
-PATCH | /soldiers/:soldierId/benefits | 200 / 404 | V
+PATCH | /soldiers/:soldierId/benefits | 200 / 404 / 400 | V
 
-POST | /budget | 201/409 | V
+POST | /budget | 201/409 / 400 | V
 GET | /budget | 200 | V
 GET | /budget/:id/transactions | 200 / 404 | V
 POST | budget/:id/spend | 400 / 409 / 201 | V
