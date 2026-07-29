@@ -7,7 +7,6 @@ const benefitService = createBenefitService(benefitsRepo);
 export default {
   postSoldierBenefit: async (req, res) => {
     const soldierId = req.params.soldierId;
-    
     const {
       unit,
       benefitType,
@@ -51,7 +50,6 @@ export default {
   },
   getSoldierBenefit: async (req, res) => {
     const soldierId = req.params.soldierId;
-    console.log(soldierId)
     const benefit = await benefitService.getBenefitById(soldierId);
     return res.json({ success: true, data: benefit });
   },
