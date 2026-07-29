@@ -3,23 +3,31 @@ import supabase from "../db/supabase.js";
 export default {
   create: async (data) => {
     const { data, error } = await supabase.from("budget").insert(data).select();
-    if (!error) {
-        return data
-    }
-    return false
+    if (!error) return data;
+    return false;
   },
-  findById: (id) => {
-    const {error, data} = await supabase.from('budget').select().eq('id', id)
-    if (!error) {
-        return data
-    }
-    return null
+  findById: async (id) => {
+    const { data, error } = await supabase.from("budget").select().eq({ id });
+    if (!error) return data;
+    return false;
   },
-  exactMatch: (unit, benefitType, month) => {
-    const {error, data} = await supabase.from('budget').select().eq('unit', unit).eq('benefitType', benefitType)
-    if (!error) {
-        return data
+  find: async (unit = null, benefitType = null, month = null) => {
+    let query = supabase;
+    await supabase.from("budget").select();
+
+    if (unit) {
+      query = query.eq("unit", unit);
     }
-    return null
-  }
+    if (unit) {
+      query = query.eq("benefitType", benefitType);
+    }
+    if (unit) {
+      query = query.eq("month", month);
+    }
+    const { error, data } = await query;
+    if (!error) {
+      return data;
+    }
+    return null;
+  },
 };

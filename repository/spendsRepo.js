@@ -8,8 +8,8 @@ export default {
     }
     return false
   },
-  getAll: () => {
-    const {error, data} = await supabase.from('budget').select()
+  getByBudgetId: (budgetId) => {
+    const {error, data} = await supabase.from('budget').select().eq({budgetId})
     if (!error) {
         return data
     }

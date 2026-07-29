@@ -4,15 +4,15 @@ const db = await connectToMongo()
 const collection = await db.collection('benefits')
 
 export default {
-    create: (data) => {
+    create: async (data) => {
         const result = await collection.insertOne(data)
         return result.insertedId.toString()
     },
-    find: (filter) => {
+    find: async (filter) => {
         const benefit = await collection.findOne(filter)
         return benefit || null
     },
-    updateHistory: (soldierId, dataUpdate) => {
+    updateHistory: async (soldierId, dataUpdate) => {
         const result = await collection.updateOne({soldierId}, dataUpdate)
         return result.modifiedCount > 0
 
