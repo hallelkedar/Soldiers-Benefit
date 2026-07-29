@@ -15,4 +15,11 @@ export default {
     }
     return null
   },
+  exactMatch: (unit, benefitType, month) => {
+    const {error, data} = await supabase.from('budget').select().eq('unit', unit).eq('benefitType', benefitType)
+    if (!error) {
+        return data
+    }
+    return null
+  }
 };

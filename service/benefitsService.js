@@ -1,4 +1,3 @@
-import benefitsRepo from "../repository/benefitsRepo.js";
 import { errorThrowing } from "../utils/utils.js";
 import { benefitValidation } from "../utils/validation.js";
 
@@ -57,7 +56,7 @@ export default function createBenefitService(repo) {
           budgetApproved,
           decisionDate,
         } = data;
-        
+
         let startDate = null;
         if (data.startDate) {
           startDate = new Date(data.startDate).toDateString();

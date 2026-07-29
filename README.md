@@ -24,8 +24,86 @@ POST | budget/:id/spend | 400 / 409 / 201 | X
 
 
 ### DB decisions
+There are 3 types of intities:
+
+- Walfare record:
+
+for that intity I choosed noSQL - mongoDB, because we can't know the exactly schema that will be in every benefit, we using array inside the document, and we don't need any connection between collections
+
+- Budget allocation, Spend transation - 
+Now we have stable and constent schema, we need connection between tables, so we'll choose postgreSQl with supabase
+
+
+
+
+
+### DataBase and .env prepare
+
+For walfare records (benefits) -
+the general schema will be - 
+```
+{
+    id: number | ObjectId,
+    soldierId: number | ObjectId,
+    unit: string,
+    currentBenefitType: "giftCard" | "diningHall",
+    history: [
+        {
+        startDate: string,
+        endDate: string || null,
+        decisionReason: string,
+        budgetApproved: boolean,
+        benefitType: "giftCard | "diningHall",
+        details: {
+
+        }
+        }
+
+    ]
+}
+```
+
+For supabase -
+you need to create 2 tables with that schema,
+* for Budget allocation -
+{
+    id: int auto_increment primary key,
+    unit: text,
+    benefitType: enum("giftCard", "diningHall"),
+    month: string,
+    allocatedAmount: number
+}
+
+* for Spend transation -
+{
+    id: int auto_increment primary key,
+    budgetId: number,
+    amount: number,
+    reason?: string,
+    createdAt: now() 
+}
+
+
+For .env file - 
+you need to write those values:
+```
+PORT=3000
+
+# Users database info
+MONGO_URI=<your mongo uri>
+
+# Sessions database info
+SUPABASE_URL= <your supabase url>
+SUPABASE_SECRET_KEY= <youre supabase secert key>
+```
+
 
 ### Run with
+```
+git remote add origin https://github.com/hallelkedar/Soldiers-Benefit.git
+git branch -M main
+git push -u origin main
+```
 ```
 npm install
 ```
