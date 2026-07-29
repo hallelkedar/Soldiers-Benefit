@@ -1,5 +1,5 @@
 import express from 'express';
-import soldiers from '../controllers/soldiers';
+import soldiers from '../controllers/benefits';
 
 const router = express.Router()
 
