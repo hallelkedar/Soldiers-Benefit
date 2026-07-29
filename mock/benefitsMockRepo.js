@@ -1,32 +1,6 @@
 import { mock } from "node:test";
 
-const benefits = [
-  {
-    id: 123,
-    soldierId: 1,
-    unit: "8200",
-    currentBenefitType: "giftCard",
-    history: [
-      {
-        startDate: "24-02-2026",
-        endDate: null,
-        decisionReason: "string",
-        budgetApproved: true,
-        benefitType: "giftCard",
-        details: {
-          cardProvide: "Goodi",
-          monthlyValue: 12,
-          validMerchants: [
-            "The jewish resterount",
-            "Shalom falafel",
-            "Shawarma betzalel",
-          ],
-        },
-      },
-    ],
-  },
-];
-
+const benefits = [];
 
 export default {
     create: mock.fn((data) => {

@@ -18,8 +18,15 @@ export default {
         budgets.push(budget)
         return budget
     }),
-    getBudgetById: mock.fn(async (id) => {
+    findById: mock.fn(async (id) => {
         const budget = budgets.find(budget => budget.id === id)
         return budget || null;
-    })
+    }),
+    // find: mock.fn(async (unit = null, benefitType = null, month = null) => {
+    //     let result = [...budgets]
+    //     if (unit) {
+
+    //     }
+    //     const budget = budgets.find(budget => budget.id === )
+    // })
 }
