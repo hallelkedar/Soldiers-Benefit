@@ -32,8 +32,9 @@ export default function createBenefitService(repo) {
       });
       return await repo.find({ id: newId });
     },
-    getBenefitById: async (soldierId) => {
-      const benefit = await repo.find(soldierId);
+    getBenefitById: async (id) => {
+      const soldierId = Number(id)
+      const benefit = await repo.find({soldierId});
       if (!benefit) {
         errorThrowing(
           `Walfare record for soldierId (${soldierId}) not found`,

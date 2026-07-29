@@ -1,4 +1,4 @@
-import { errorThrowing } from "../utils/utils"
+import { errorThrowing, getSpentAmount } from "../utils/utils.js"
 
 export default function createSpendsService (spendsRepo, budgetRepo) {
     return {
@@ -16,7 +16,7 @@ export default function createSpendsService (spendsRepo, budgetRepo) {
                 errorThrowing(`Budget not found`, 404)
             }
             const transactions = await spendsRepo.getByBudgetId(budgetId)
-            const spentAmount = transactions.reduce((acc, t) => acc + t.amount, 0)
+            const spentAmount = getSpentAmount(transaction)
             const remainingAmount = budget.allocatedAmount - spentAmount
             if (spentAmount + amount > budget.allocatedAmount) {
                 return {error: 'Amount is more than allowed', remainingAmount}
@@ -26,8 +26,5 @@ export default function createSpendsService (spendsRepo, budgetRepo) {
             const transaction = await spendsRepo.create(data)
             return {transaction, remainingAmount: remainingAmount + amount}
         },
-        getSpentAmount: async (transactions) => {
-            return transactions.reduce((acc, t) => acc + t.amount, 0)
-        }
     }
 }

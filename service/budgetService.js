@@ -1,15 +1,15 @@
-import { errorThrowing } from "../utils/utils.js";
+import { errorThrowing, getSpentAmount } from "../utils/utils.js";
 import { benefitValidation } from "../utils/validation.js";
 
-export default function createBudgetService(repo) {
+export default function createBudgetService(budgetRepo, spendsRepo) {
   return {
     createBudget: async (data) => {
       const { unit, benefitType, month, allocatedAmount } = data;
-      const match = await repo.find(unit, benefitType, month)
+      const match = await budgetRepo.find(unit, benefitType, month)
       if (match) {
         errorThrowing(`Exact combination is already exists ${match.id}`, 409)
       }
-      const budget = await repo.create({
+      const budget = await budgetRepo.create({
         unit,
         benefitType,
         month,
@@ -17,9 +17,10 @@ export default function createBudgetService(repo) {
       });
     },
     getBudgets: async (filter) => {
-        const budgets = await repo.find(...filter)
-        return budgets.map(budget => {
-            const spentAmount = ''// TODO Calculate all it's transactions (spends)
+        const budgets = await budgetRepo.find(...filter)
+        return budgets.map(async budget => {
+            const transactions = await spendsRepo.getByBudgetId(budgetId)
+            const spentAmount = getSpentAmount(transaction)
             return {
                 ...budget,
                 spentAmount, 
