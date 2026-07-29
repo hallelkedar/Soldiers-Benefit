@@ -6,12 +6,12 @@ import budgetRepo from "../repository/budgetRepo.js";
 const spendsService = createSpendsService(spendsRepo, budgetRepo)
 
 export default {
-    getTransactions: (req, res) => {
+    getTransactions: async (req, res) => {
         const budgetId = req.params.id
         const transactions = await spendsService.getTransactions(budgetId)
         return res.json({success: true, data: transactions})
     },
-    createSpend: (req, res) => {
+    createSpend: async (req, res) => {
         const budgetId = req.params.id
         const {amount, reason} = req.body
         if (!amount) {
