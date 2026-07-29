@@ -11,16 +11,18 @@
 
 
 ### Endpoints
+```
 METHOD | URL | EXPECTED STATUS CODE | DONE
 -------------------
-POST | /soldiers/:soldierId/benefits | 201 / 409 | X
-GET | /soldiers/:soldierId/benefits | 200 / 404 | X
-PATCH | /soldiers/:soldierId/benefits | 200 / 404 | X
+POST | /soldiers/:soldierId/benefits | 201 / 409 | V
+GET | /soldiers/:soldierId/benefits | 200 / 404 | V
+PATCH | /soldiers/:soldierId/benefits | 200 / 404 | V
 
-POST | /budget | 201/409 | X
-GET | /budget | 200 | X
-GET | /budget/:id/transactions | 200 / 404 | X
-POST | budget/:id/spend | 400 / 409 / 201 | X
+POST | /budget | 201/409 | V
+GET | /budget | 200 | V
+GET | /budget/:id/transactions | 200 / 404 | V
+POST | budget/:id/spend | 400 / 409 / 201 | V
+```
 
 
 ### DB decisions
@@ -101,9 +103,11 @@ SUPABASE_SECRET_KEY= <youre supabase secert key>
 ### Run with
 ```
 git remote add origin https://github.com/hallelkedar/Soldiers-Benefit.git
-git branch -M main
-git push -u origin main
+cd Soldiers-Benefit
 ```
 ```
 npm install
+```
+```
+npm start
 ```
