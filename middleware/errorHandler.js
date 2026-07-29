@@ -1,4 +1,4 @@
-export default errorHandler =  (err, req, res, next) => {
+export default (err, req, res, next) => {
     console.error(err.stack)
     if (err.statusCode) {
         res.status(err.statusCode).json({success: false, message: err.message})
