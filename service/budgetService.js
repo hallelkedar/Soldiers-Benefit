@@ -5,9 +5,9 @@ export default function createBudgetService(budgetRepo, spendsRepo) {
   return {
     createBudget: async (data) => {
       const { unit, benefitType, month, allocatedAmount } = data;
-      const match = await budgetRepo.find(unit, benefitType, month)
+      const match = await budgetRepo.find(unit, benefitType, month);
       if (match) {
-        errorThrowing(`Exact combination is already exists ${match.id}`, 409)
+        errorThrowing(`Exact combination is already exists ${match.id}`, 409);
       }
       const budget = await budgetRepo.create({
         unit,
@@ -17,17 +17,16 @@ export default function createBudgetService(budgetRepo, spendsRepo) {
       });
     },
     getBudgets: async (filter) => {
-        const budgets = await budgetRepo.find(...filter)
-        return budgets.map(async budget => {
-            const transactions = await spendsRepo.getByBudgetId(budgetId)
-            const spentAmount = getSpentAmount(transaction)
-            return {
-                ...budget,
-                spentAmount, 
-                remainingAmount: budget.allocatedAmount - spentAmount
-            }
-    })
-        }
-
-    }
+      const budgets = await budgetRepo.find(...filter);
+      return budgets.map(async (budget) => {
+        const transactions = await spendsRepo.getByBudgetId(budgetId);
+        const spentAmount = getSpentAmount(transaction);
+        return {
+          ...budget,
+          spentAmount,
+          remainingAmount: budget.allocatedAmount - spentAmount,
+        };
+      });
+    },
   };
+}

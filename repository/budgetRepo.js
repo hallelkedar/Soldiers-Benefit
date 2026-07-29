@@ -2,7 +2,10 @@ import supabase from "../db/supabase.js";
 
 export default {
   create: async (budget) => {
-    const { data, error } = await supabase.from("budget").insert(budget).select();
+    const { data, error } = await supabase
+      .from("budget")
+      .insert(budget)
+      .select();
     if (!error) return data;
     return false;
   },

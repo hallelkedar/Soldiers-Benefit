@@ -7,16 +7,10 @@ const budgetService = createBudgetService(budgetMockRepo);
 
 describe("Budget service test", () => {
   describe("createBudget test", () => {
-    it("Should return the new budget as it's saved", async () => {
-      
-    });
-    it("Should throw error because unit+benefitType+month is already exists", async () => {
-
-    })
+    it("Should return the new budget as it's saved", async () => {});
+    it("Should throw error because unit+benefitType+month is already exists", async () => {});
   });
   describe("getBudgets test", () => {
-    it("Should return array of budget with that unit", async () => {
-
-    })
-  })
+    it("Should return array of budget with that unit", async () => {});
+  });
 });

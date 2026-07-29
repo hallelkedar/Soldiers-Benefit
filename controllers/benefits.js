@@ -37,8 +37,7 @@ export default {
       errorThrowing("budgetApproved must be true or false", 400);
     }
 
-    const benefit = await benefitService.createBenefit(
-      soldierId, {
+    const benefit = await benefitService.createBenefit(soldierId, {
       unit,
       benefitType,
       details,

@@ -25,14 +25,20 @@ export default {
       errorThrowing("Month has to be in YYYY-MM format.", 400);
     }
     const budget = await budgetService.createBudget({
-        unit, benefitType, month, allocatedAmount
+      unit,
+      benefitType,
+      month,
+      allocatedAmount,
     });
-    return res.status(201).json({success: true, data: budget})
+    return res.status(201).json({ success: true, data: budget });
   },
   getBudgets: async (req, res) => {
-    const {unit, month, benefitType } = req.query
-    const budgets = await budgetService.getBudgets({unit, month, benefitType})
-    res.json({success: true, data: budgets})
-
-  }
+    const { unit, month, benefitType } = req.query;
+    const budgets = await budgetService.getBudgets({
+      unit,
+      month,
+      benefitType,
+    });
+    res.json({ success: true, data: budgets });
+  },
 };
