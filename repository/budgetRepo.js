@@ -1,8 +1,8 @@
 import supabase from "../db/supabase.js";
 
 export default {
-  create: async (data) => {
-    const { data, error } = await supabase.from("budget").insert(data).select();
+  create: async (budget) => {
+    const { data, error } = await supabase.from("budget").insert(budget).select();
     if (!error) return data;
     return false;
   },
@@ -18,10 +18,10 @@ export default {
     if (unit) {
       query = query.eq("unit", unit);
     }
-    if (unit) {
+    if (benefitType) {
       query = query.eq("benefitType", benefitType);
     }
-    if (unit) {
+    if (month) {
       query = query.eq("month", month);
     }
     const { error, data } = await query;
