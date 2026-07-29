@@ -12,8 +12,8 @@ export default {
         const benefit = await collection.findOne(filter)
         return benefit || null
     },
-    updateHistory: (soldierId, data) => {
-        const result = await collection.updateOne({soldierId}, {$push: {history: data}})
+    updateHistory: (soldierId, dataUpdate) => {
+        const result = await collection.updateOne({soldierId}, dataUpdate)
         return result.modifiedCount > 0
 
     }
