@@ -10,13 +10,12 @@ export default {
     return false;
   },
   findById: async (id) => {
-    const { data, error } = await supabase.from("budget").select().eq({ id });
+    const { data, error } = await supabase.from("budget").select().eq("id", id);
     if (!error) return data;
     return false;
   },
   find: async (unit = null, benefitType = null, month = null) => {
-    let query = supabase;
-    await supabase.from("budget").select();
+    let query = supabase.from("budget").select();
 
     if (unit) {
       query = query.eq("unit", unit);

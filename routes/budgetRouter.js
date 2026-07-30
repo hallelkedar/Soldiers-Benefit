@@ -8,6 +8,6 @@ router.post("/", budget.postBudget);
 router.get("/", budget.getBudgets);
 
 router.get("/:id/transactions", spends.getTransactions);
-router.post("/:id/transactions", spends.createSpend);
+router.post("/:id/spend", spends.createSpend);
 
 export default router;

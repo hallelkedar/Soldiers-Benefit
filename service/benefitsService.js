@@ -1,5 +1,4 @@
 import { errorThrowing } from "../utils/utils.js";
-import { benefitValidation } from "../utils/validation.js";
 
 export default function createBenefitService(repo) {
   return {
@@ -13,7 +12,6 @@ export default function createBenefitService(repo) {
       if (data.startDate) {
         startDate = new Date(data.startDate).toDateString();
       }
-      benefitValidation(benefitType, details, decisionReason, budgetApproved);
 
       const newId = await repo.create({
         soldierId,
@@ -30,10 +28,9 @@ export default function createBenefitService(repo) {
           },
         ],
       });
-      return await repo.find({ id: newId });
+      return await repo.find({ soldierId });
     },
-    getBenefitById: async (id) => {
-      const soldierId = Number(id);
+    getBenefitById: async (soldierId) => {
       const benefit = await repo.find({ soldierId });
       if (!benefit) {
         errorThrowing(
@@ -44,48 +41,52 @@ export default function createBenefitService(repo) {
       return benefit;
     },
     addBenefit: async (soldierId, data) => {
-      const benefit = await repo.find(soldierId);
+      const benefit = await repo.find({soldierId});
       if (!benefit) {
         errorThrowing(
           `Walfare record for soldierId (${soldierId}) not found`,
           404,
         );
-        const {
-          benefitType,
-          details,
-          decisionReason,
-          budgetApproved,
-          decisionDate,
-        } = data;
+      }
+      const {
+        benefitType,
+        details,
+        decisionReason,
+        budgetApproved,
+        decisionDate,
+      } = data;
 
-        let startDate = null;
-        if (data.startDate) {
-          startDate = new Date(data.startDate).toDateString();
-        }
+      let startDate = new Date().toDateString();
+      if (data.startDate) {
+        startDate = new Date(data.startDate).toDateString();
+      }
 
-        benefitValidation(benefitType, details, decisionReason, budgetApproved);
-        if (decisionDate.getDate() === 1) {
-          // && TODO if number of the day that pass from jan 1 that year (including it) is a prime number)
-          return {
-            reverted: true,
-            reason: "Minister of finance is a bit despondent",
-          };
-        }
+      if (new Date(decisionDate).getDate() === 1) {
+        // && TODO if number of the day that pass from jan 1 that year (including it) is a prime number)
+        return {
+          reverted: true,
+          reason: "Minister of finance is a bit despondent",
+        };
+      }
 
-        benefit.benefitType = benefitType;
-        benefit.currentBenefitType = new Date().toDateString();
-        benefit.budgetApproved = budgetApproved;
-        benefit.history[benefit.history.length - 1].endDate =
-          new Date().toDateString();
-        benefit.details.push({
-          startDate: decisionDate || new Date().toTimeString(),
-          endDate: null,
-          decisionReason,
-          budgetApproved,
-          benefitType,
-          details,
-        });
-        await repo.update(soldierId, benefit);
+      benefit.benefitType = benefitType;
+      benefit.currentBenefitType = startDate;
+      benefit.budgetApproved = budgetApproved;
+      benefit.history[benefit.history.length - 1].endDate =
+        new Date().toDateString();
+      benefit.history.push({
+        startDate: decisionDate || new Date().toTimeString(),
+        endDate: null,
+        decisionReason,
+        budgetApproved,
+        benefitType,
+        details,
+      });
+      if (await repo.update(soldierId, benefit)) {
+        return {
+          reverted: false,
+          reason: "",
+        };
       }
     },
   };

@@ -12,8 +12,8 @@ export default {
     const benefit = await collection.findOne(filter);
     return benefit || null;
   },
-  updateHistory: async (soldierId, dataUpdate) => {
-    const result = await collection.updateOne({ soldierId }, dataUpdate);
+  update: async (soldierId, data) => {
+    const result = await collection.updateOne({ soldierId }, data);
     return result.modifiedCount > 0;
   },
 };

@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json());
 
-app.use("/soldiers/:soldierId/benefits", benefitRouter);
+app.use("/soldiers", benefitRouter);
 app.use("/budget", budgetRouter);
 
 app.use(errorHandler);

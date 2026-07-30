@@ -16,7 +16,7 @@ METHOD | URL | EXPECTED STATUS CODE | DONE
 -------------------
 POST | /soldiers/:soldierId/benefits | 201 / 409 / 400 | V
 GET | /soldiers/:soldierId/benefits | 200 / 404 | V
-PATCH | /soldiers/:soldierId/benefits | 200 / 404 / 400 | V
+PATCH | /soldiers/:soldierId/benefits | 200 / 404 / 400 | X
 
 POST | /budget | 201/409 / 400 | V
 GET | /budget | 200 | V
@@ -68,6 +68,7 @@ the general schema will be -
 For supabase -
 you need to create 2 tables with that schema,
 * for Budget allocation -
+name: budget
 {
     id: int auto_increment primary key,
     unit: text,
@@ -77,6 +78,7 @@ you need to create 2 tables with that schema,
 }
 
 * for Spend transation -
+name: spends
 {
     id: int auto_increment primary key,
     budgetId: number,

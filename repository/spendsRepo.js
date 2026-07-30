@@ -15,7 +15,7 @@ export default {
     const { error, data } = await supabase
       .from("budget")
       .select()
-      .eq({ budgetId });
+      .eq('budgetId', budgetId);
     if (!error) {
       return data;
     }

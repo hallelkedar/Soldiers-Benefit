@@ -1,29 +1,25 @@
 import { errorThrowing } from "../utils/utils.js";
 import createBudgetService from "../service/budgetService.js";
 import budgetRepo from "../repository/budgetRepo.js";
+import spendsRepo from "../repository/spendsRepo.js";
+import { budgetSchema } from "../validation/budgetSchema.js";
 
-const budgetService = createBudgetService(budgetRepo);
+const budgetService = createBudgetService(budgetRepo, spendsRepo);
 
 export default {
   postBudget: async (req, res) => {
     const { unit, benefitType, month, allocatedAmount } = req.body;
-    if (!unit || !benefitType || !month || !allocatedAmount) {
-      errorThrowing("Requierd fields are missing.", 400);
+
+    const validation = budgetSchema.safeParse({
+      unit,
+      benefitType,
+      month,
+      allocatedAmount,
+    });
+    if (!validation.success) {
+      errorThrowing(validation.error.issues[0].message, 400);
     }
-    if (benefitType !== "giftCard" || "diningHall") {
-      errorThrowing("benefitType has to be giftCard or diningHall", 400);
-    }
-    if (isNaN(Number(allocatedAmount))) {
-      errorThrowing("allocatedAmount has to be a number.", 400);
-    }
-    if (
-      !month.length === 7 ||
-      month[5] !== "-" ||
-      isNaN(Number(month.slice(0, 5))) ||
-      isNaN(Number(month.slice(5)))
-    ) {
-      errorThrowing("Month has to be in YYYY-MM format.", 400);
-    }
+
     const budget = await budgetService.createBudget({
       unit,
       benefitType,
