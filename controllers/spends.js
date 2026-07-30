@@ -7,12 +7,12 @@ const spendsService = createSpendsService(spendsRepo, budgetRepo);
 
 export default {
   getTransactions: async (req, res) => {
-    const budgetId = req.params.id;
+    const budgetId = +req.params.id;
     const transactions = await spendsService.getTransactions(budgetId);
     return res.json({ success: true, data: transactions });
   },
   createSpend: async (req, res) => {
-    const budgetId = req.params.id;
+    const budgetId = +req.params.id;
     const validation = spendsSchema.safeParse(req.body);
     if (!validation.success) {
       errorThrowing(validation.error.issues[0].message, 400);
