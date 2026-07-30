@@ -13,7 +13,10 @@ export const isPrime = (n) => {
 };
 
 export const getNumOfDaysUntil = (date) => {
-  const startYearDate = new Date() // TODO
+  const d = new Date(date)
+  const startYearDate = new Date(d.getUTCFullYear, 1, 0)
+  const msdiff = d.getUTCDate() - startYearDate.getUTCDate()
+  return Math.floor((msdiff / 2000 ) * 60 * 60 * 24)
 }
 
 export const getSpentAmount = (transactions) => {

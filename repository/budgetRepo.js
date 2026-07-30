@@ -11,7 +11,7 @@ export default {
   },
   findById: async (id) => {
     const { data, error } = await supabase.from("budget").select().eq("id", id);
-    if (!error) return data;
+    if (!error && data.length !== 0) return data;
     return false;
   },
   find: async (unit = null, benefitType = null, month = null) => {
@@ -30,6 +30,6 @@ export default {
     if (!error) {
       return data;
     }
-    return null;
+    throw error
   },
 };

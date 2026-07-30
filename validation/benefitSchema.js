@@ -1,15 +1,15 @@
 import z, { literal, union } from "zod";
 
 const giftCardDetailsSchema = z.object({
-    cardProvider: z.string(""),
-    monthlyValue: z.coerce.number(),
-    validMerchants: z.array(),
+    cardProvider: z.string(),
+    monthlyValue: z.coerce.number().positive(),
+    validMerchants: z.array(z.string()),
   })
 
 const diningHallDetailsSchema = z.object({
     baseId: z.string(),
     kosherLevel: z.string(),
-    mealTimes: z.array(),
+    mealTimes: z.array(z.string()),
   })
 
 export const benefitsSchema = z.discriminatedUnion("benefitType", [
@@ -18,15 +18,15 @@ export const benefitsSchema = z.discriminatedUnion("benefitType", [
     unit: z.string("unit is require field"),
     budgetApproved: z.coerce.boolean("Budget approved must be true or false"),
     decisionReason: z.string("decisionReason is require field"),
-    startDate: z.string().optional(),
+    startDate: z.iso.date().optional(),
     details: giftCardDetailsSchema
   }),
   z.object({
     benefitType: z.literal("diningHall"),
     unit: z.string("unit is require field"),
-    budgetApproved: z.boolean(),
+    budgetApproved: z.coerce.boolean(),
     decisionReason: z.string("decisionReason is require field"),
-    startDate: z.string().optional(),
+    startDate: z.iso.date().optional(),
     details: diningHallDetailsSchema,
   })
 ])
@@ -34,18 +34,16 @@ export const benefitsSchema = z.discriminatedUnion("benefitType", [
 export const addBenefitSchema = z.discriminatedUnion("benefitType", [
   z.object({
     benefitType: z.literal("giftCard"),
-    budgetApproved: z.boolean("Budget approved must be true or false"),
-    startDate: z.string().optional(),
+    budgetApproved: z.coerce.boolean("Budget approved must be true or false"),
     decisionReason: z.string("decisionReason is require field"),
     details: giftCardDetailsSchema,
-    decisionDate: z.string().optional()
+    decisionDate: z.iso.date().optional()
   }),
   z.object({
     benefitType: z.literal("diningHall"),
     budgetApproved: z.coerce.boolean(),
-    startDate: z.string().optional(),
     decisionReason: z.string("decisionReason is require field"),
     details: diningHallDetailsSchema,
-    decisionDate: z.string().optional()
+    decisionDate: z.iso.date().optional()
   })
 ])

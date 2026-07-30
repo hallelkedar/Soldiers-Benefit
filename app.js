@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import errorHandler from "./middleware/errorHandler.js";
 import benefitRouter from "./routes/benefitRouter.js";
 import budgetRouter from "./routes/budgetRouter.js";
+import logger from './middleware/logger.js'
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+app.use(logger)
 
 app.use("/soldiers", benefitRouter);
 app.use("/budget", budgetRouter);

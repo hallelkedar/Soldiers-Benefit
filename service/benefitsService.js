@@ -1,4 +1,4 @@
-import { errorThrowing } from "../utils/utils.js";
+import { errorThrowing, getNumOfDaysUntil, isPrime } from "../utils/utils.js";
 
 export default function createBenefitService(repo) {
   return {
@@ -8,9 +8,9 @@ export default function createBenefitService(repo) {
       if (await repo.find({ soldierId })) {
         errorThrowing("Soldier is already exists.", 409);
       }
-      let startDate = null;
+      let entryStartDate = new Date().toDateString();
       if (data.startDate) {
-        startDate = new Date(data.startDate).toDateString();
+        entryStartDate = new Date(data.startDate).toDateString();
       }
 
       const newId = await repo.create({
@@ -19,7 +19,7 @@ export default function createBenefitService(repo) {
         currentBenefitType: benefitType,
         history: [
           {
-            startDate: startDate || new Date().toTimeString(),
+            startDate: entryStartDate,
             endDate: null,
             decisionReason,
             budgetApproved,
@@ -53,29 +53,25 @@ export default function createBenefitService(repo) {
         details,
         decisionReason,
         budgetApproved,
-        decisionDate,
       } = data;
 
-      let startDate = new Date().toDateString();
-      if (data.startDate) {
-        startDate = new Date(data.startDate).toDateString();
+      let entryStartDate = new Date()
+      if (data.decisionDate) {
+        entryStartDate = new Date(data.decisionDate)
       }
-
-      if (new Date(decisionDate).getDate() === 1) {
-        // && TODO if number of the day that pass from jan 1 that year (including it) is a prime number)
+      
+      if (entryStartDate.getDate() === 1 && isPrime(getNumOfDaysUntil(entryStartDate))) {
         return {
           reverted: true,
           reason: "Minister of finance is a bit despondent",
         };
       }
 
-      benefit.benefitType = benefitType;
-      benefit.currentBenefitType = startDate;
-      benefit.budgetApproved = budgetApproved;
+      benefit.currentBenefitType = benefitType;
       benefit.history[benefit.history.length - 1].endDate =
         new Date().toDateString();
       benefit.history.push({
-        startDate: decisionDate || new Date().toTimeString(),
+        startDate: entryStartDate,
         endDate: null,
         decisionReason,
         budgetApproved,

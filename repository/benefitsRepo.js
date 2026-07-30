@@ -13,7 +13,7 @@ export default {
     return benefit || null;
   },
   update: async (soldierId, data) => {
-    const result = await collection.updateOne({ soldierId }, data);
+    const result = await collection.updateOne({ soldierId }, {$set: {data}});
     return result.modifiedCount > 0;
   },
 };

@@ -3,7 +3,7 @@ import supabase from "../db/supabase.js";
 export default {
   create: async (spend) => {
     const { data, error } = await supabase
-      .from("budget")
+      .from("spends")
       .insert(spend)
       .select();
     if (!error) {
@@ -13,7 +13,7 @@ export default {
   },
   getByBudgetId: async (budgetId) => {
     const { error, data } = await supabase
-      .from("budget")
+      .from("spends")
       .select()
       .eq('budgetId', budgetId);
     if (!error) {
