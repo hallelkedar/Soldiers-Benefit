@@ -15,10 +15,12 @@ describe("Spends service test", () => {
           }),
         },
         {
-          findById: mock.fn((id) => [{
-            allocatedAmount: 26
-          }]),
-        }
+          findById: mock.fn((id) => [
+            {
+              allocatedAmount: 26,
+            },
+          ]),
+        },
       );
       const result = await service.createSpend(1, 27);
       assert.strictEqual(result.error, "Amount is more than allowed");
@@ -38,19 +40,25 @@ describe("Spends service test", () => {
   });
   describe("getTransactions test", () => {
     it("Should throw error - budget not found", async () => {
-      const service = createSpendsService({}, {findById: mock.fn(id => null)})
+      const service = createSpendsService(
+        {},
+        { findById: mock.fn((id) => null) },
+      );
       assert.rejects(async () => {
-        await service.getTransactions(1)
-      }, 'Budget not found')
+        await service.getTransactions(1);
+      }, "Budget not found");
     });
     it("Should return empty array for budget with no attached transactions", async () => {
-      const service = createSpendsService({
-        getByBudgetId: mock.fn(id => [])
-      }, {
-        findById: mock.fn(id => true)
-      })
-      const result = await service.getTransactions(1)
-      assert.deepEqual(result, [])
+      const service = createSpendsService(
+        {
+          getByBudgetId: mock.fn((id) => []),
+        },
+        {
+          findById: mock.fn((id) => true),
+        },
+      );
+      const result = await service.getTransactions(1);
+      assert.deepEqual(result, []);
     });
   });
 });

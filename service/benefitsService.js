@@ -41,26 +41,24 @@ export default function createBenefitService(repo) {
       return benefit;
     },
     addBenefit: async (soldierId, data) => {
-      const benefit = await repo.find({soldierId});
+      const benefit = await repo.find({ soldierId });
       if (!benefit) {
         errorThrowing(
           `Walfare record for soldierId (${soldierId}) not found`,
           404,
         );
       }
-      const {
-        benefitType,
-        details,
-        decisionReason,
-        budgetApproved,
-      } = data;
+      const { benefitType, details, decisionReason, budgetApproved } = data;
 
-      let entryStartDate = new Date()
+      let entryStartDate = new Date();
       if (data.decisionDate) {
-        entryStartDate = new Date(data.decisionDate)
+        entryStartDate = new Date(data.decisionDate);
       }
-      
-      if (entryStartDate.getDate() === 1 && isPrime(getNumOfDaysUntil(entryStartDate))) {
+
+      if (
+        entryStartDate.getDate() === 1 &&
+        isPrime(getNumOfDaysUntil(entryStartDate))
+      ) {
         return {
           reverted: true,
           reason: "Minister of finance is a bit despondent",

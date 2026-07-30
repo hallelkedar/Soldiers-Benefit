@@ -30,6 +30,6 @@ export default {
     if (!error) {
       return data;
     }
-    throw error
+    throw error;
   },
 };

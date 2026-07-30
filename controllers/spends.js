@@ -17,7 +17,11 @@ export default {
     if (!validation.success) {
       errorThrowing(validation.error.issues[0].message, 400);
     }
-    const result = await spendsService.createSpend(budgetId, req.body.amount, req.body.reason);
+    const result = await spendsService.createSpend(
+      budgetId,
+      req.body.amount,
+      req.body.reason,
+    );
     if (result.error) {
       return res.status(400).json(result);
     }

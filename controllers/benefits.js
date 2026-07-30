@@ -1,7 +1,10 @@
 import { errorThrowing } from "../utils/utils.js";
 import createBenefitService from "../service/benefitsService.js";
 import benefitsRepo from "../repository/benefitsRepo.js";
-import { benefitsSchema, addBenefitSchema } from "../validation/benefitSchema.js";
+import {
+  benefitsSchema,
+  addBenefitSchema,
+} from "../validation/benefitSchema.js";
 
 const benefitService = createBenefitService(benefitsRepo);
 
@@ -26,7 +29,7 @@ export default {
       startDate,
     });
     if (!validation.success) {
-      errorThrowing(validation.error.issues[0].message, 400)
+      errorThrowing(validation.error.issues[0].message, 400);
     }
     const benefit = await benefitService.createBenefit(soldierId, {
       unit,
@@ -57,11 +60,11 @@ export default {
       details,
       decisionReason,
       budgetApproved,
-      decisionDate
-    })
+      decisionDate,
+    });
     if (!validation.success) {
-      console.log(validation.error.issues[0].message)
-      errorThrowing(validation.error.issues[0].message, 400)
+      console.log(validation.error.issues[0].message);
+      errorThrowing(validation.error.issues[0].message, 400);
     }
     const result = await benefitService.addBenefit(soldierId, {
       benefitType,

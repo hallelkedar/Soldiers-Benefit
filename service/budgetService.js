@@ -6,7 +6,10 @@ export default function createBudgetService(budgetRepo, spendsRepo) {
       const { unit, benefitType, month, allocatedAmount } = data;
       const matchs = await budgetRepo.find(unit, benefitType, month);
       if (matchs.length !== 0) {
-        errorThrowing(`Exact combination is already exists ${matchs[0].id}`, 409);
+        errorThrowing(
+          `Exact combination is already exists ${matchs[0].id}`,
+          409,
+        );
       }
       const budget = await budgetRepo.create({
         unit,
@@ -16,7 +19,7 @@ export default function createBudgetService(budgetRepo, spendsRepo) {
       });
       return budget;
     },
-    
+
     getBudgets: async (filter) => {
       const { unit, month, benefitType } = filter;
       const budgets = await budgetRepo.find(unit, benefitType, month);
