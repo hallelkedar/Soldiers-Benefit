@@ -8,7 +8,50 @@
 - SupaBase (with postgresql)
  
 ### Project structure
-
+```
+.
+├── app.js
+├── controllers
+│   ├── benefits.js
+│   ├── budget.js
+│   └── spends.js
+├── db
+│   ├── mongo.js
+│   └── supabase.js
+├── docker-compose.yml
+├── DockerFile
+├── middleware
+│   ├── errorHandler.js
+│   └── logger.js
+├── package.json
+├── README.md
+├── repository
+│   ├── benefitsRepo.js
+│   ├── budgetRepo.js
+│   └── spendsRepo.js
+├── routes
+│   ├── benefitRouter.js
+│   └── budgetRouter.js
+├── service
+│   ├── benefitsService.js
+│   ├── budgetService.js
+│   └── spendsService.js
+├── test
+│   ├── controllers.test
+│   │   ├── benefits.test.js
+│   │   ├── budget.test.js
+│   │   └── spends.test.js
+│   └── service.test
+│       ├── benefitsService.test.js
+│       ├── budgetService.test.js
+│       └── spendsService.test.js
+├── utils
+│   └── utils.js
+└── validation
+    ├── benefitSchema.js
+    ├── budgetSchema.js
+    └── spendsSchema.js
+```
 
 ### Endpoints
 ```
@@ -16,7 +59,7 @@ METHOD | URL | EXPECTED STATUS CODE | DONE
 -------------------
 POST | /soldiers/:soldierId/benefits | 201 / 409 / 400 | V
 GET | /soldiers/:soldierId/benefits | 200 / 404 | V
-PATCH | /soldiers/:soldierId/benefits | 200 / 404 / 400 | X
+PATCH | /soldiers/:soldierId/benefits | 200 / 404 / 400 | V
 
 POST | /budget | 201/409 / 400 | V
 GET | /budget | 200 | V
@@ -103,6 +146,10 @@ SUPABASE_SECRET_KEY= <youre supabase secert key>
 
 
 ### Run with
+if you want to upload a docker file - 
+```
+docker-compose up -d
+```
 ```
 git remote add origin https://github.com/hallelkedar/Soldiers-Benefit.git
 cd Soldiers-Benefit

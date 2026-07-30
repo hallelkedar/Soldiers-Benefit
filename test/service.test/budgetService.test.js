@@ -7,7 +7,7 @@ describe("Budget service test", () => {
     it("Should return the new budget as it's saved", async () => {
       const service = createBudgetService(
         {
-          find: mock.fn((id) => null),
+          find: mock.fn((id) => []),
           create: mock.fn((data) => {
             return {};
           }),
@@ -20,9 +20,9 @@ describe("Budget service test", () => {
     it("Should throw error because unit+benefitType+month is already exists", async () => {
       const service = createBudgetService(
         {
-          find: mock.fn((id) => {
-            id: 1;
-          }),
+          find: mock.fn((id) => [{
+            id: 1
+          }]),
         },
         {},
       );
@@ -37,9 +37,9 @@ describe("Budget service test", () => {
         {
           find: mock.fn((unit, benefitType, month) => {
             return [
-              { id: 1, remainingAmount: 1 },
-              { id: 2, remainingAmount: 1 },
-              { id: 3, remainingAmount: 1 },
+              { id: 1, allocatedAmount: 123 },
+              { id: 2, allocatedAmount: 123 },
+              { id: 3, allocatedAmount: 123 },
             ];
           }),
         },
@@ -50,10 +50,10 @@ describe("Budget service test", () => {
         },
       );
       const result = await service.getBudgets({});
-      assert.deepEqual(result, [
-        { id: 1, spentAmount: 26, remainingAmount: 0 },
-        { id: 2, spentAmount: 26, remainingAmount: 0 },
-        { id: 3, spentAmount: 26, remainingAmount: 0 }
+      assert.deepStrictEqual(result, [
+        { id: 1, allocatedAmount: 123, spentAmount: 26, remainingAmount: 97 },
+        { id: 2, allocatedAmount: 123, spentAmount: 26, remainingAmount: 97 },
+        { id: 3, allocatedAmount: 123, spentAmount: 26, remainingAmount: 97 }
       ]);
     });
   });

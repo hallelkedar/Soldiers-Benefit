@@ -22,7 +22,6 @@ export default function createSpendsService(spendsRepo, budgetRepo) {
         return { error: "Amount is more than allowed", remainingAmount};
       }
       
-
       const data = reason ? { budgetId, amount, reason } : { budgetId, amount };
       const transaction = await spendsRepo.create(data);
       return { transaction, remainingAmount: remainingAmount + Number(amount) };

@@ -10,15 +10,15 @@ describe("Spends service test", () => {
     it("Should return failed message and remainingAmount", async () => {
       const service = createSpendsService(
         {
-          findById: mock.fn((id) => {
-            allocatedAmount: 26;
-          }),
-        },
-        {
           getByBudgetId: mock.fn((id) => {
             return [{ amount: 12 }, { amount: 13 }, { amount: 1 }];
           }),
         },
+        {
+          findById: mock.fn((id) => [{
+            allocatedAmount: 26
+          }]),
+        }
       );
       const result = await service.createSpend(1, 27);
       assert.strictEqual(result.error, "Amount is more than allowed");

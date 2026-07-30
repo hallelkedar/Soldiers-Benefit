@@ -60,6 +60,7 @@ export default {
       decisionDate
     })
     if (!validation.success) {
+      console.log(validation.error.issues[0].message)
       errorThrowing(validation.error.issues[0].message, 400)
     }
     const result = await benefitService.addBenefit(soldierId, {

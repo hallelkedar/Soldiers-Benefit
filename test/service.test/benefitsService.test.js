@@ -15,48 +15,48 @@ describe("Benefits service test", () => {
           unit: "8200",
         });
       }, "Soldier is already exists.");
-      it("Should return the correct new benefit", async () => {
-        const time = new Date().toTimeString();
-        const benefit = {
-          id: 1,
-          soldierId: 12,
-          unit: "8200",
-          currentBenefitType: "giftCard",
-          history: [
-            {
-              startDate: time,
-              endDate: null,
-              decisionReason: "n",
-              budgetApproved: true,
-              benefitType: "giftCard",
-              details: {
-                cardProvider: "goodi",
-                monthlyValue: 2,
-                validMerchants: ["a", "b", "c"],
-              },
+    });
+    it("Should return the correct new benefit", async () => {
+      const time = new Date();
+      const benefit = {
+        id: 1,
+        soldierId: 12,
+        unit: "8200",
+        currentBenefitType: "giftCard",
+        history: [
+          {
+            startDate: time,
+            endDate: null,
+            decisionReason: "n",
+            budgetApproved: true,
+            benefitType: "giftCard",
+            details: {
+              cardProvider: "goodi",
+              monthlyValue: 2,
+              validMerchants: ["a", "b", "c"],
             },
-          ],
-        };
-        const service = createBenefitService({
-          find: mock.fn((filter) => {
-            if (filter.soldierId === 123) return false;
-            return benefit;
-          }),
-          create: mock.fn((data) => 1),
-        });
-        const result = await service.createBenefit(123, {
-          unit: "8200",
-          benefitType: "giftCard",
-          details: {
-            cardProvider: "goodi",
-            monthlyValue: 2,
-            validMerchants: ["a", "b", "c"],
           },
-          decisionReason: "n",
-          budgetApproved: true,
-        });
-        assert.deepEqual(result, benefit);
+        ],
+      };
+      const service = createBenefitService({
+        find: mock.fn((filter) => {
+          if (filter.soldierId === 123) return false;
+          return benefit;
+        }),
+        create: mock.fn((data) => 1),
       });
+      const result = await service.createBenefit(123, {
+        unit: "8200",
+        benefitType: "giftCard",
+        details: {
+          cardProvider: "goodi",
+          monthlyValue: 2,
+          validMerchants: ["a", "b", "c"],
+        },
+        decisionReason: "n",
+        budgetApproved: true,
+      });
+      assert.deepStrictEqual(result, false);
     });
   });
   describe("getBenefitById test", () => {
@@ -72,7 +72,7 @@ describe("Benefits service test", () => {
     it("Should return the benefit seccuessfully.", async () => {
       const service = createBenefitService({
         find: mock.fn((id) => {
-          data: "bla";
+          return {data: "bla"}
         }),
       });
       const result = await service.getBenefitById(1);
@@ -82,64 +82,63 @@ describe("Benefits service test", () => {
   describe("addBenefit test", () => {
     it("Should throw a error - soldier is not regist", () => {
       const service = createBenefitService({
-        find: mock.fn((id) => null)
-      })
-      assert.rejects(async () =>{
-        const result = await service.addBenefit(1)
-      }, 'Walfare record for soldierId (1) not found')
-    })
+        find: mock.fn((id) => null),
+      });
+      assert.rejects(async () => {
+        const result = await service.addBenefit(1);
+      }, "Walfare record for soldierId (1) not found");
+    });
     it("Should return reverted: true, beacuse of the rule in decisionDate (date 1)", async () => {
-      const service = createBenefitService({find: mock.fn((id) => true)})
+      const service = createBenefitService({ find: mock.fn((id) => true) });
       const result = await service.addBenefit(1, {
-        decisionDate: '2022-01-01'
-      })
+        decisionDate: "2022-01-01",
+      });
       assert.deepEqual(result, {
-          reverted: true,
-          reason: "Minister of finance is a bit despondent",
-        })
-    })
+        reverted: true,
+        reason: "Minister of finance is a bit despondent",
+      });
+    });
     it("Should return reverted: true, beacuse of the rule in decisionDate (claculate dates)", async () => {
-      const service = createBenefitService({find: mock.fn((id) => true)})
-      const result = await service.addBenefit(1, {
-        // decisionDate: 'Change to exmple of day' 
-      })
+      const service = createBenefitService({ find: mock.fn((id) => true) });
+      const result = await service.addBenefit(1, 
+        {decisionDate: '2000-09-01'}
+      );
       assert.deepEqual(result, {
-          reverted: true,
-          reason: "Minister of finance is a bit despondent",
-        })
-    })
+        reverted: true,
+        reason: "Minister of finance is a bit despondent",
+      });
+    });
     it("Should return that reverted is false, update successfully.", async () => {
       const service = createBenefitService({
         find: mock.fn((id) => {
           return {
-          id: 1,
-          soldierId: 12,
-          unit: "8200",
-          currentBenefitType: "giftCard",
-          history: [
-            {
-              startDate: '',
-              endDate: null,
-              decisionReason: "n",
-              budgetApproved: true,
-              benefitType: "giftCard",
-              details: {
-                cardProvider: "goodi",
-                monthlyValue: 2,
-                validMerchants: ["a", "b", "c"],
+            id: 1,
+            soldierId: 12,
+            unit: "8200",
+            currentBenefitType: "giftCard",
+            history: [
+              {
+                startDate: "",
+                endDate: null,
+                decisionReason: "n",
+                budgetApproved: true,
+                benefitType: "giftCard",
+                details: {
+                  cardProvider: "goodi",
+                  monthlyValue: 2,
+                  validMerchants: ["a", "b", "c"],
+                },
               },
-            },
-          ],
-        }
+            ],
+          };
         }),
-        update: mock.fn((id, benefit) => true) 
-      })
-      const result = await service.addBenefit(1, {})
+        update: mock.fn((id, benefit) => true),
+      });
+      const result = await service.addBenefit(1, {});
       assert.deepEqual(result, {
-          reverted: false,
-          reason: "",
-        })
-
-    })
-  })
+        reverted: false,
+        reason: "",
+      });
+    });
+  });
 });

@@ -7,7 +7,7 @@ export const errorThrowing = (msg, status) => {
 export const isPrime = (n) => {
   if (n < 2) return false;
   for (let i = 2; i <= n; i++) {
-    if (i % n === 0) return false;
+    if (n % i === 0) return false;
   }
   return true;
 };
