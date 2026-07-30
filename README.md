@@ -150,6 +150,7 @@ if you want to upload a docker file -
 ```
 docker-compose up -d
 ```
+remote and run:
 ```
 git remote add origin https://github.com/hallelkedar/Soldiers-Benefit.git
 cd Soldiers-Benefit
